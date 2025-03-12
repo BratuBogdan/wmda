@@ -1,4 +1,5 @@
 import pandas as pd
+from numpy.ma.extras import average
 from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
@@ -22,14 +23,13 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-
 # 3. Train a Naïve Bayes classifier (from Exercise 1)
 gaussianModel = GaussianNB()
 gaussianModel.fit(X_train, y_train)
 
 # 4. Train a Logistic Regression model
 
-logisticRegressionModel = LogisticRegression()
+logisticRegressionModel = LogisticRegression(class_weight='balanced', random_state=42)
 logisticRegressionModel.fit(X_train, y_train)
 
 gausY_pred = gaussianModel.predict(X_test)
@@ -41,7 +41,11 @@ logicY_pred = logisticRegressionModel.predict(X_test)
 print(accuracy_score(y_test, gausY_pred))
 print(accuracy_score(y_test, logicY_pred))
 # 6. Print results
-
-
+print("---")
+print(precision_score(y_test, gausY_pred, average='macro'))
+print(precision_score(y_test, logicY_pred, average='macro'))
+print("---")
+print(recall_score(y_test, gausY_pred, average='macro'))
+print(recall_score(y_test, logicY_pred, average='macro'))
 # Optional: If you’d like to see a confusion matrix for each model
 # from sklearn.metrics import confusion_matrix
